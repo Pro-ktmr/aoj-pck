@@ -1,250 +1,212 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-	<meta http-equiv="Content-Style-Type" content="text/css" />
-	<meta http-equiv="Content-Script-Type" content="text/javascript" />
-	<meta name="author" content="Pro_ktmr">
-    
-    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.widgets.min.js"></script>
-	<link rel="stylesheet" href="style.css" type="text/css" />
-	<script type="text/javascript" src="script.js?ver=210729"></script>
-    <link rel="shortcut icon" href="favicon.ico" type="image/vnd.microsoft.icon">
-    
-    <meta name="description" content="AOJ-PCKではパソコン甲子園の過去問を解くことができます。また、オンラインジャッジでの自分やライバルの提出状況を表示することができます。情報オリンピックなど競技プログラミングの学習にご利用ください。">
-    
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Cache-Control" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+  <link rel="icon" href="favicon.ico" />
 
-    <link rel="canonical" href="http://aoj-pck.vsw.jp/" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
 
-    <!-- Global site tag (gtag.js) - Google Analytics -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-89866809-2"></script>
-    <script>
-        window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
-        gtag('js', new Date());
+  <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+  <script type="text/javascript"
+    src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/js/jquery.tablesorter.min.js"></script>
+  <link rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.31.0/css/theme.default.min.css">
 
-        gtag('config', 'UA-89866809-2');
-    </script>
+  <script src="script.js"></script>
 
-	<title>AOJ-PCK(パソコン甲子園過去問)</title>
-	
+  <meta name="description" content="AOJ-PCK ではパソコン甲子園の過去問に取り組めます．オンラインジャッジにおける自分やライバルの提出状況も表示できます．">
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-0YCEGH6ERT"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'G-0YCEGH6ERT');
+  </script>
+
+  <title>AOJ-PCK (AIZU ONLINE JUDGE - パソコン甲子園過去問)</title>
+
 </head>
+
 <body>
-    <header>
-        <h1><a class="title" href="http://aoj-pck.vsw.jp/">AOJ-PCK(パソコン甲子園過去問)</a></h1>
-        <p>パソコン甲子園の過去問を解いたり、自分やライバルの提出状況を表示することができます。</p>
-    </header>
-    <div id="search">
-        <h2>検索 | Search</h2>
-        <form method="get">
-            <table id="search_table">
-                    <colgroup>
-                        <col width="20%">
-                        <col width="40%">
-                        <col width="20%">
-                        <col width="20%">
-                    </colgroup>
-                <tbody>
-                    <tr>
-                        <th>自分 | User ID</th>
-                        <td>
-                            <input type="text" id="aoj_id" name="aoj_id" placeholder="自分のAOJ ID" size="40">
-                            <input type="hidden" name="sta" value="off"><input type="checkbox" id="sta" name="sta">統計
-                        </td>
-                        <th>年度 | Years</th>
-                        <td>
-                            <select id="year_begin" name="year_begin">
-                                <option value="2003" selected>2003</option>
-                                <option value="2004">2004</option>
-                                <option value="2005">2005</option>
-                                <option value="2006">2006</option>
-                                <option value="2007">2007</option>
-                                <option value="2008">2008</option>
-                                <option value="2009">2009</option>
-                                <option value="2010">2010</option>
-                                <option value="2011">2011</option>
-                                <option value="2012">2012</option>
-                                <option value="2013">2013</option>
-                                <option value="2014">2014</option>
-                                <option value="2015">2015</option>
-                                <option value="2016">2016</option>
-                                <option value="2017">2017</option>
-                                <option value="2018">2018</option>
-                                <option value="2019">2019</option>
-                                <option value="2020">2020</option>
-                                <option value="2021">2021</option>
-                                <option value="2022">2022</option>
-                            </select>
-                            〜
-                            <select id="year_end" name="year_end">
-                                <option value="2003">2003</option>
-                                <option value="2004">2004</option>
-                                <option value="2005">2005</option>
-                                <option value="2006">2006</option>
-                                <option value="2007">2007</option>
-                                <option value="2008">2008</option>
-                                <option value="2009">2009</option>
-                                <option value="2010">2010</option>
-                                <option value="2011">2011</option>
-                                <option value="2012">2012</option>
-                                <option value="2013">2013</option>
-                                <option value="2014">2014</option>
-                                <option value="2015">2015</option>
-                                <option value="2016">2016</option>
-                                <option value="2017">2017</option>
-                                <option value="2018">2018</option>
-                                <option value="2019">2019</option>
-                                <option value="2020">2020</option>
-                                <option value="2021">2021</option>
-                                <option value="2022" selected>2022</option>
-                            </select>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>ライバル | Rivals</th>
-                        <td>
-                            <input type="text" id="rival_aoj_id" name="rival_aoj_id" placeholder="ライバルのAOJ ID(カンマ区切り)" size="40">
-                            <input type="hidden" name="rival_sta" value="off"><input type="checkbox" id="rival_sta" name="rival_sta">統計
-                        </td>
-                        <th>大会 | Categories</th>
-                        <input type="hidden" name="yosen" value="off"><input type="hidden" name="honsen" value="off">
-                        <td>
-                            <input type="checkbox" id="yosen" name="yosen" checked>予選　<input type="checkbox" id="honsen" name="honsen" checked>本選
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            <button type="submit">表示 | Search</button>
-        </form>
-        <p>※ページをブックマークすると毎回の入力を省略することができます。</p>
+  <header>
+    <nav class="navbar navbar-dark bg-dark">
+      <div class="container-fluid">
+        <h1><a class="navbar-brand" href=".">AOJ-PCK <span class="navbar-text">(AIZU ONLINE JUDGE - パソコン甲子園過去問)</span>
+        </h1></a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <div class="mt-4 container alert alert-primary" role="alert">
+      AOJ-PCK では，パソコン甲子園の過去問を解いたり，自分やライバルの提出状況を表示したりできます．
     </div>
 
-    <div id="statistic">
-        <h2>統計｜Statistic</h2>
-    </div>
+    <section class="p-0 container">
+      <div class="card">
+        <div class="card-header" id="configHeader">
+          <a data-bs-toggle="collapse" href="#collapseConfig" role="button" aria-expanded="false"
+            aria-controls="collapseConfig">
+            設定
+          </a>
+        </div>
+        <div id="collapseConfig" class="collapse show">
+          <div class="card-body">
+            <form action="./index.html" method="GET">
 
-    <div id="problem">
-        <h2>問題一覧 | Problem List</h2>
-        <table id="problem_table_main"  class="tablesorter">
-            <colgroup>
-                <col width="10%">
-                <col width="18%">
-                <col width="35%">
-                <col width="7%">
-                <col width="30%">
-            </colgroup>
-            <thead>
-                <tr>
-                    <th class="p">問題番号</th><th class="p">出典</th><th class="p">問題名</th><th class="p">配点</th><th class="p">ライバル</th>
-                </tr>
-            </thead>
-            <tbody id="problem_table">
+              <div class="row mb-3">
+                <label for="my_id" class="col-sm-3 col-form-label">自分の AOJ アカウント ID</label>
+                <div class="col-sm-9">
+                  <input type="textbox" class="form-control" id="my_id" name="my_id" placeholder="自分の AOJ アカウント ID を入力">
+                </div>
+              </div>
 
-            </tbody>
-        </table>
-    </div>
+              <div class="row mb-3">
+                <label for="rival_id" class="col-sm-3 col-form-label">ライバルの AOJ アカウント ID</label>
+                <div class="col-sm-9">
+                  <input type="textbox" class="form-control" id="rival_id" name="rival_id"
+                    placeholder="ライバルの AOJ アカウント ID を入力 (半角カンマ区切り)">
+                </div>
+              </div>
 
-    <div>
-        <h2>統計について｜About Statistic</h2>
-        <p>
-            予選では得点が8割以上で緑(本戦出場安全圏内)、6割以上で黃(本戦出場ボーダー付近)、それ未満で赤になります。<br/>
-            本選では得点が7割以上で緑(優勝圏内)、5割以上で黃(最下位回避圏内)、それ未満で赤になります。<br/>
-            ※あくまで目安であり本番の結果を保証するものではありません。
-        </p>
-    </div>
+              <div class="row mb-3">
+                <label for="year_begin" class="col-sm-3 col-form-label">期間</label>
+                <div class="col-sm-4">
+                  <select class="form-select" id="year_begin" name="year_begin" aria-label="開始年を選択">
+                    <option value="2003" selected>2003</option>
+                    <option value="2004">2004</option>
+                    <option value="2005">2005</option>
+                    <option value="2006">2006</option>
+                    <option value="2007">2007</option>
+                    <option value="2008">2008</option>
+                    <option value="2009">2009</option>
+                    <option value="2010">2010</option>
+                    <option value="2011">2011</option>
+                    <option value="2012">2012</option>
+                    <option value="2013">2013</option>
+                    <option value="2014">2014</option>
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                  </select>
+                </div>
+                <label for="year_end" class="col-sm-1 col-form-label" style="text-align: center;">～</label>
+                <div class="col-sm-4">
+                  <select class="form-select" id="year_end" name="year_end" aria-label="終了年を選択">
+                    <option value="2003">2003</option>
+                    <option value="2004">2004</option>
+                    <option value="2005">2005</option>
+                    <option value="2006">2006</option>
+                    <option value="2007">2007</option>
+                    <option value="2008">2008</option>
+                    <option value="2009">2009</option>
+                    <option value="2010">2010</option>
+                    <option value="2011">2011</option>
+                    <option value="2012">2012</option>
+                    <option value="2013">2013</option>
+                    <option value="2014">2014</option>
+                    <option value="2015">2015</option>
+                    <option value="2016">2016</option>
+                    <option value="2017">2017</option>
+                    <option value="2018">2018</option>
+                    <option value="2019">2019</option>
+                    <option value="2020">2020</option>
+                    <option value="2021">2021</option>
+                    <option value="2022">2022</option>
+                    <option value="9999" selected>最新</option>
+                  </select>
+                </div>
+              </div>
 
-    <div>
-        <h2>更新履歴｜Change Log</h2>
-        <p>
-            2021/10/06<br/>
-            ・2021年予選問題を掲載しました。
-        </p>
-        <p>
-            2021/07/29<br/>
-            ・本選に関するライバルの統計情報の不具合を修正しました。
-        </p>
-        <p>
-            2020/11/28<br/>
-            ・2020年本選問題を掲載しました。
-        </p>
-        <p>
-            2020/10/04<br/>
-            ・2020年予選問題を掲載しました。
-        </p>
-        <p>
-            2019/11/20<br/>
-            ・2019年本選問題を掲載しました。<br/>
-            ・リスト最上段の問題が統計情報に反映されないバグを修正しました。
-        </p>
-        <p>
-            2019/09/28<br/>
-            ・2019年予選問題を掲載しました。
-        </p>
-        <p>
-            2019/03/26<br/>
-            ・ソート機能を実装しました。
-        </p>
-        <p>
-            2018/12/25<br/>
-            ・サイトを移転しました。
-        </p>
-        <p>
-            2018/12/02<br/>
-            ・2018年本選問題を掲載しました。
-        </p>
-        <p>
-            2018/09/23<br/>
-            ・2018年予選問題を掲載しました。(ページ上部の年度の欄で「2018」を含めないと表示されません)
-        </p>
-        <p>
-            2018/07/30<br/>
-            ・統計情報(合計点等)をページ上部に表示する機能を追加しました。
-        </p>
-        <p>
-            2018/07/29<br/>
-            ・提出状況がページを更新しなくても自動的に更新される機能を追加しました。<br/>
-            ・右下に時計を追加しました。<br/>
-            ・配点が表示されるようにしました。年度別・予選本選別に合計点数を表示する機能も追加予定です。<br/>
-            ・ライバルが多いときに改行されない問題を修正しました。
-        </p>
-        <p>
-            2018/05/29<br/>
-            ・AOJの最新のAPIに対応し、提出状況の反映にラグがほぼ無くなりました。<br/>
-            ・AOJβ版のリンクも同時に掲載を行うよう修正しましたが、今後URLが変更されリンクが無効となる可能性があります。
-        </p>
-        <p>
-            2018/05/25<br/>
-            ・サイトを公開しました。
-        </p>
-    </div>
+              <div class="row mb-3">
+                <label for="category" class="col-sm-3 col-form-label">大会カテゴリ</label>
+                <div class="col-sm-9">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="yosen" name="yosen" checked>
+                    <label class="form-check-label" for="yosen">予選</label>
+                  </div>
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="honsen" name="honsen" checked>
+                    <label class="form-check-label" for="honsen">本選</label>
+                  </div>
+                </div>
+              </div>
 
-    <div>
-        <h2>リンク | Link</h2>
-        <ul>
-            <li>・<a href="http://web-ext.u-aizu.ac.jp/pc-concours/index.html">パソコン甲子園</a></li>
-            解説等はこちらをご覧ください。
-            <li>・<a href="https://www.ioi-jp.org/">情報オリンピック 日本委員会</a></li>
-            パソコン甲子園と並ぶ高校生向けプログラミングコンテストです。
-            <li>・<a href="https://kenkoooo.com/atcoder/">AtCoder Problems</a></li>
-            <li>・<a href="http://joi.goodbaton.com/">AOJ/AtCoder-JOI</a></li>
-            <li>・<a href="http://aoj-icpc.ichyo.jp/">AOJ-ICPC</a></li>
-            このサイトは上記3サイトを参考にして作成されています。
-            <li>・<a href="http://aoj-pck.vsw.jp/oj-oi/">OJ-OI</a></li>
-            Pro_ktmrが作成している姉妹サイトです。
-        </ul>
-    </div>
+              <button type="submit" class="mb-3 btn btn-primary">表示</button>
 
-    <p>ご意見・ご連絡等は Pro.ktmr☆gmail.com または @Pro_ktmr までお願い致します。</p>
+              <div class="row mb-3">
+                <p>※ 「表示」後にページをブックマークすると毎回の入力を省略できます．</p>
+              </div>
 
-    <div id="sita"></div>
-    
-    <div id="clock_frame">
-        <span id="clock_date"></span>
-        <span id="clock_time"></span>
-    </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="p-0 container">
+      <h2>統計</h2>
+
+      <p>統計機能は現在提供停止中です．</p>
+    </section>
+
+    <section class="p-0 container">
+      <h2>過去問一覧</h2>
+
+      <table id="problemTable" class="table tablesorter">
+        <thead>
+          <tr>
+            <th class="p" scope="col">出典</th>
+            <th class="p" scope="col">問題名</th>
+            <th class="p" scope="col">配点</th>
+            <th class="p" scope="col">ライバル</th>
+          </tr>
+        </thead>
+        <tbody id="problemTbody">
+
+        </tbody>
+      </table>
+    </section>
+
+    <section class="p-0 container">
+      <h2>統計について</h2>
+      <p>
+        予選では得点が 8 割以上で緑 (本選出場安全圏内)，6 割以上で黄 (本戦出場ボーダー付近)，それ未満で赤になります．<br />
+        本選では得点が 7 割以上で緑 (優勝圏内)，5 割以上で黄 (最下位回避圏内)，それ未満で赤になります．<br />
+        ※ あくまで目安であり本番の結果を保証するものではありません．また，開発者は現役を引退して久しいので，今もこの指標が正しいのか定かではありません．
+      </p>
+    </section>
+
+    <section class="p-0 container">
+      <h2>リンク</h2>
+      <ul>
+        <li><a href="https://pckoshien.u-aizu.ac.jp/">パソコン甲子園</a><br />大会参加方法や過去問の解説等はこちらをご覧ください．</li>
+        <li><a href="https://www.ioi-jp.org/">情報オリンピック日本委員会</a><br />情報オリンピックはパソコン甲子園と並ぶ高校生向けプログラミングコンテストです．</li>
+      </ul>
+      <ul>
+        <li><a href="https://kenkoooo.com/atcoder/">AtCoder Problems</a></li>
+        <li><a href="http://joi.goodbaton.com/">AOJ/AtCoder-JOI</a></li>
+        <li><a href="http://aoj-icpc.ichyo.jp/">AOJ-ICPC</a></li>
+      </ul>
+      <p>このサイトは上記 3 サイトを参考にして作成されています．素敵なサービスを提供して頂きありがとうございます．</p>
+      <ul>
+        <li><a href="http://aoj-pck.vsw.jp/oj-oi/">OJ-OI</a><br />きたむー (Pro_ktmr) が開発した姉妹サイトです．</li>
+      </ul>
+    </section>
+
+  </main>
 </body>

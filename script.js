@@ -1,44 +1,137 @@
-var csvUrl = "list.csv?ver=210729";
+const csvUrl = 'list.txt';
 
-// GETのデータを配列にして返す
-function GetQueryString() {
-    var result = {};
-    if (1 < window.location.search.length) {
-        // 最初の1文字 (?記号) を除いた文字列を取得する
-        var query = window.location.search.substring(1);
-        // クエリの区切り記号 (&) で文字列を配列に分割する
-        var parameters = query.split('&');
+window.addEventListener('load', (e) => {
+    loadSearchParameters();
+    showTable();
+    setInterval(updateTable, 30000);
+});
 
-        for (var i = 0; i < parameters.length; i++) {
-            // パラメータ名とパラメータ値に分割する
-            var element = parameters[i].split('=');
+function convertCsvtoArray(csv) {
+    let res = [];
+    let lines = csv.split('\n');
+    for (let i = 0; i < lines.length; i++) {
+        res[i] = lines[i].split(',');
+    }
+    return res;
+}
 
-            var paramName = decodeURIComponent(element[0]);
-            var paramValue = decodeURIComponent(element[1]);
+function loadSearchParameters() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('my_id')) my_id.value = params.get('my_id');
+    if (params.has('rival_id')) rival_id.value = params.get('rival_id');
+    if (params.has('year_begin')) year_begin.value = params.get('year_begin');
+    if (params.has('year_end')) year_end.value = params.get('year_end');
+    if (params.has('my_id') && !params.has('yosen')) yosen.checked = false;
+    if (params.has('my_id') && !params.has('honsen')) honsen.checked = false;
+}
 
-            // パラメータ名をキーとして連想配列に追加する
-            result[paramName] = paramValue;
+function getProblemArray() {
+    let req = new XMLHttpRequest();
+    req.open('GET', csvUrl, false);
+    req.send(null);
+    return convertCsvtoArray(req.responseText);
+}
+
+function getSubmissionDict(id) {
+    if (id == '') return [];
+    let req = new XMLHttpRequest();
+    req.open('GET', `https://judgeapi.u-aizu.ac.jp/submission_records/users/${id}?size=99999999`, false);
+    req.send(null);
+    return JSON.parse(req.responseText);
+}
+
+function showTable() {
+    new Promise((resolve, reject) => {
+        resolve(getProblemArray());
+    }).then((problems) => {
+        for (let problem of problems) {
+            if (problem.length <= 1) continue;
+            if (yosen.checked == false && problem[2] == 'yosen') continue;
+            if (honsen.checked == false && problem[2] == 'honsen') continue;
+            if (parseInt(problem[1]) < parseInt(year_begin.value)) continue;
+            if (parseInt(problem[1]) > parseInt(year_end.value)) continue;
+
+            let tr = problemTbody.insertRow(-1);
+
+            let tdSource = tr.insertCell(-1);
+            let compName = problem[2] == 'yosen' ? '予選' : '本選';
+            tdSource.innerHTML = `${problem[1]}年 ${compName} ${problem[3]}`;
+
+            let tdName = tr.insertCell(-1);
+            tdName.innerHTML = `<a href="http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=${problem[0]}&lang=ja" target="_blank">${problem[4]}</a>`;
+            if (problem[2] == 'yosen') tdName.innerHTML += ` (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Prelim/${problem[0]} target="_blank">β</a>)`;
+            if (problem[2] == "honsen") tdName.innerHTML += ` (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Final/${problem[0]} target="_blank">β</a>)`;
+
+            let tdPoint = tr.insertCell(-1);
+            tdPoint.innerHTML = problem[5];
+
+            let tdRival = tr.insertCell(-1);
+        }
+        //$("#problemTable").tablesorter();
+        updateTable();
+    });
+}
+
+function updateTable() {
+    let rivalIds = rival_id.value.replace(' ', '').split(',');
+    new Promise((resolve, reject) => {
+        let mySubmissions = getSubmissionDict(my_id.value);
+        let rivalsSubmissions = [];
+        for (let id of rivalIds) {
+            rivalsSubmissions[id] = getSubmissionDict(id);
+        }
+        resolve([mySubmissions, rivalsSubmissions]);
+    }).then((result) => {
+        let mySubmissions = result[0];
+        let rivalsSubmissions = result[1];
+        for (let problemRow of problemTbody.rows) {
+            updateRow(problemRow, mySubmissions, rivalsSubmissions);
+        }
+    });
+}
+
+function updateRow(problemRow, mySubmissions, rivalsSubmissions) {
+    let idx = problemRow.cells[1].innerHTML.search(/\d{4}/);
+    if (idx == -1) return;
+    let problemId = parseInt(problemRow.cells[1].innerHTML.substring(idx, idx + 4));
+
+    problemRow.classList.remove('table-danger');
+    problemRow.cells[3].innerHTML = '';
+
+    let myStatus = 0;
+    for (let submission of mySubmissions) {
+        if (submission['problemId'] == problemId) {
+            if (submission['status'] == 4) {
+                myStatus = 1;
+                break;
+            }
+            else {
+                myStatus = -1;
+            }
         }
     }
-    return result;
-}
+    if (myStatus == 1) problemRow.classList.add('table-success');
+    else if (myStatus == -1) problemRow.classList.add('table-danger');
 
-// 読み込んだCSVデータを二次元配列に変換する関数convertCSVtoArray()の定義
-function convertCSVtoArray(str) { // 読み込んだCSVデータが文字列として渡される
-    var result = []; // 最終的な二次元配列を入れるための配列
-    var tmp = str.split("\n"); // 改行を区切り文字として行を要素とした配列を生成
-
-    // 各行ごとにカンマで区切った文字列を要素とした二次元配列を生成
-    for (var i = 0; i < tmp.length; ++i) {
-        result[i] = tmp[i].split(',');
+    for (let [id, submissions] of Object.entries(rivalsSubmissions)) {
+        let status = 0;
+        for (let submission of submissions) {
+            if (submission['problemId'] == problemId) {
+                if (submission['status'] == 4) {
+                    status = 1;
+                    break;
+                }
+                else {
+                    status = -1;
+                }
+            }
+        }
+        if (status == 1) problemRow.cells[3].innerHTML += `<span class="badge bg-success">${id}</span> `;
+        else if (status == -1) problemRow.cells[3].innerHTML += `<span class="badge bg-danger">${id}</span> `;
     }
-
-    return result;
 }
 
-//=====以下オリジナル=====
-
-function checkData(){
+/*function checkData(){
     //統計情報初期化
     statistic.innerHTML = "<h2>統計｜Statistic</h2>";
 
@@ -525,83 +618,4 @@ function checkData(){
             }
         }
     }
-}
-setInterval(checkData, 15000);//単位ミリ秒 1分=60000
-
-window.onload = function () {
-
-    //GETを表に反映
-    var g = GetQueryString();
-    if (g["aoj_id"]) aoj_id.value = g["aoj_id"];
-    if (g["sta"] == "on") sta.checked = true;
-    if (g["rival_aoj_id"]) rival_aoj_id.value = g["rival_aoj_id"];
-    if (g["rival_sta"] == "on") rival_sta.checked = true;
-    if (g["year_begin"]) year_begin.value = g["year_begin"];
-    if (g["year_end"]) year_end.value = g["year_end"];
-    if (g["yosen"] == "off") yosen.checked = false;
-    if (g["honsen"] == "off") honsen.checked = false;
-
-    //問題一覧を表示
-    var req = new XMLHttpRequest();
-    req.open("GET", csvUrl, false);
-    req.send(null);
-
-    var result = new Array();
-    result = convertCSVtoArray(req.responseText);
-
-    for (var i = 0; i < result.length; i++) {
-        if (result[i].length <= 1) continue;
-        if (yosen.checked == false && result[i][2] == "yosen") continue;
-        if (honsen.checked == false && result[i][2] == "honsen") continue;
-        if (result[i][1] < year_begin.value) continue;
-        if (result[i][1] > year_end.value) continue;
-
-        var tr = problem_table.insertRow(-1);
-
-        var td1 = tr.insertCell(-1);
-        td1.innerHTML = result[i][0];
-
-        var td2 = tr.insertCell(-1);
-        td2.innerHTML = result[i][1] + "年";
-        if (result[i][2] == "yosen") td2.innerHTML += "予選";
-        if (result[i][2] == "honsen") td2.innerHTML += "本選";
-        td2.innerHTML += result[i][3];
-
-        var td3 = tr.insertCell(-1);
-        td3.innerHTML = '<a href="http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=' + result[i][0] + '&lang=ja" target="_blank">' + result[i][4] + '</a>';
-        if (result[i][2] == "yosen") td3.innerHTML += ' (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Prelim/' + result[i][0] + '" target="_blank">β</a>)';
-        if (result[i][2] == "honsen") td3.innerHTML += ' (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Final/' + result[i][0] + '" target="_blank">β</a>)';
-
-        var td4 = tr.insertCell(-1);
-        td4.innerHTML = result[i][5];
-
-        var td5 = tr.insertCell(-1);
-    }
-
-    $("#problem_table_main").tablesorter(); 
-
-    checkData();
-}
-
-function clock() {
-    var weeks = new Array("Sun", "Mon", "Thu", "Wed", "Thr", "Fri", "Sat");
-
-    var now = new Date();
-    var y = now.getFullYear();
-    var mo = now.getMonth() + 1;
-    var d = now.getDate();
-    var w = weeks[now.getDay()]; //0~6で日曜始まりで取得されるからweeks配列のインデックスとして指定
-    var h = now.getHours();
-    var mi = now.getMinutes();
-    var s = now.getSeconds();
-
-    //2ケタ処理
-    if (mo < 10) mo = "0" + mo;
-    if (d < 10) d = "0" + d;
-    if (mi < 10) mi = "0" + mi;
-    if (s < 10) s = "0" + s;
-
-    document.getElementById("clock_date").innerHTML = y + "/" + mo + "/" + d + " (" + w + ")";
-    document.getElementById("clock_time").innerHTML = h + ":" + mi + ":" + s;
-}
-setInterval(clock, 1000);
+}*/
