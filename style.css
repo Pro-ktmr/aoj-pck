@@ -1,0 +1,256 @@
+@charset "UTF-8";
+
+html,body,div,span,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,abbr,address,cite,code,del,dfn,em,img,ins,kbd,q,samp,small,strong,sub,sup,var,b,i,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td,article,aside,canvas,details,figcaption,figure,footer,header,hgroup,main,menu,nav,section,summary,time,mark,audio,video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+    background: transparent;
+    font-weight: normal;
+}
+
+body {
+	font-size: 16px;
+    font-family: "ヒラギノ角ゴ Pro W3","Hiragino Kaku Gothic Pro","メイリオ",Meiryo,Osaka,"ＭＳ Ｐゴシック","MS PGothic",sans-serif;
+    line-height: 1.6;
+    padding: 4px;
+}
+
+header {
+    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+div {
+	margin-bottom: 20px;
+}
+
+p {
+    padding: 5px;
+}
+
+a:link {
+    color: #0000ff;
+}
+a:visited {
+    color: #000080;
+}
+a:hover {
+    color: #ff0000;
+}
+a:active {
+    color: #ff8000;
+}
+
+li {
+    line-height: 1.5;
+    padding: 0.5em 0;
+    list-style-type: circle;
+}
+
+h1 {
+    color: #9d9d9d;
+    font-size: 28px;
+    line-height: 1.4;
+    position: relative;
+    padding: 8px 16px;
+    margin-bottom: 20px;
+    margin-top: -14px;
+    margin-left: -4px;
+    margin-right: -4px;
+    background: #000;
+}
+
+a.title {
+    color: #9d9d9d;
+    text-decoration: none;
+}
+
+a.title:hover {
+    color: #fff;
+}
+
+h2 {
+    margin-bottom: 0.5em;
+    font-size: 24px;
+    color: #000;
+    padding-left: 4px;
+    border-bottom: 1px solid #9d9d9d;
+}
+
+h3 {
+    margin-bottom: 0.5em;
+    font-size: 16px;
+    color: #000;
+    padding-left: 8px;
+    border-left: 4px solid #8AB2BF;
+}
+
+table {
+    width: 100%;
+    margin-bottom: 1em;
+    border-collapse: collapse;
+    border: 0px;
+    vertical-align: middle;
+}
+
+th {
+    padding: 8px;
+    text-align: center;
+    vertical-align: middle;
+    border: 1px solid #ddd;
+    background: #8AB2BF;
+}
+
+th.p {
+    padding: 2px;
+}
+
+td {
+    padding: 8px;
+    text-align: left;
+    border: 1px solid #ddd;
+    border-left-style: none;
+    border-right-style: none;
+}
+
+table.statistic_table th {
+    width: 12.5%;
+    text-align: center;
+}
+
+table.statistic_table th.p {
+    width: 12.5%;
+    text-align: center;
+}
+
+table.statistic_table td {
+    padding: 6px;
+    width: 12.5%;
+    text-align: center;
+}
+
+table.statistic_table td.ac {
+    padding: 6px;
+    width: 12.5%;
+    text-align: center;
+    border: 1px solid #ddd;
+    background: #D7FBD7;
+}
+
+table.statistic_table td.tle {
+    padding: 6px;
+    width: 12.5%;
+    text-align: center;
+    border: 1px solid #ddd;
+    background: #EFF2CA;
+}
+
+table.statistic_table td.wa {
+    padding: 6px;
+    width: 12.5%;
+    text-align: center;
+    border: 1px solid #ddd;
+    background: #FFC7C8;
+}
+
+table#problem_table_main td {
+    line-height: 100%;
+    font-size: 1em;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+    line-height: 1.2;
+}
+
+table#problem_table_main td.ac {
+    line-height: 100%;
+    font-size: 1em;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+    background: #D7FBD7;
+    line-height: 1.2;
+}
+
+table#problem_table_main td.wa {
+    line-height: 100%;
+    font-size: 1em;
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+    background: #FFC7C8;
+    line-height: 1.2;
+}
+
+button {
+    width: 100%;
+    font-size: 16px;
+}
+
+span.label-ac {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+    background-color: #5cb85c;
+}
+
+span.label-wa {
+    display: inline;
+    padding: .2em .6em .3em;
+    font-size: 75%;
+    font-weight: 700;
+    line-height: 1;
+    color: #fff;
+    text-align: center;
+    white-space: nowrap;
+    vertical-align: baseline;
+    border-radius: .25em;
+    background-color: #d9534f;
+}
+
+div#sita {
+    width: 100%;
+    height: 80px;
+}
+
+div#clock_frame {
+    color: white;
+    background-color: black;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
+    width: 180px;
+    height: 40px;
+    margin: 0;
+    padding: 20px 0;
+    text-align: center;
+    line-height: 20px;
+    font-size: 15px;
+    cursor: pointer;
+    z-index: 50;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.tablesorter-default .header,.tablesorter-default .tablesorter-header {
+    background-image:url(data:image/gif;base64,R0lGODlhFQAJAIAAACMtMP///yH5BAEAAAEALAAAAAAVAAkAAAIXjI+AywnaYnhUMoqt3gZXPmVg94yJVQAAOw==);
+    background-position:center right;
+    background-repeat:no-repeat;
+    cursor:pointer;
+    white-space:normal;
+}
+
+.tablesorter-header-inner {
+    margin: 0;
+}
