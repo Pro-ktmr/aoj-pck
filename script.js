@@ -3,7 +3,7 @@ const csvUrl = 'list.txt';
 window.addEventListener('load', (e) => {
     loadSearchParameters();
     showTable();
-    setInterval(updateTable, 30000);
+    setInterval(update, 30000);
 });
 
 function convertCsvtoArray(csv) {
@@ -40,6 +40,22 @@ function getSubmissionDict(id) {
     return JSON.parse(req.responseText);
 }
 
+function getStatus(submissions, problemId) {
+    let status = 0;
+    for (let submission of submissions) {
+        if (submission['problemId'] == problemId) {
+            if (submission['status'] == 4) {
+                status = 1;
+                break;
+            }
+            else {
+                status = -1;
+            }
+        }
+    }
+    return status;
+}
+
 function showTable() {
     new Promise((resolve, reject) => {
         resolve(getProblemArray());
@@ -59,8 +75,8 @@ function showTable() {
 
             let tdName = tr.insertCell(-1);
             tdName.innerHTML = `<a href="http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=${problem[0]}&lang=ja" target="_blank">${problem[4]}</a>`;
-            if (problem[2] == 'yosen') tdName.innerHTML += ` (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Prelim/${problem[0]} target="_blank">β</a>)`;
-            if (problem[2] == "honsen") tdName.innerHTML += ` (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Final/${problem[0]} target="_blank">β</a>)`;
+            if (problem[2] == 'yosen') tdName.innerHTML += ` (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Prelim/${problem[0]} target="_blank">β版</a>)`;
+            if (problem[2] == "honsen") tdName.innerHTML += ` (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Final/${problem[0]} target="_blank">β版</a>)`;
 
             let tdPoint = tr.insertCell(-1);
             tdPoint.innerHTML = problem[5];
@@ -68,11 +84,11 @@ function showTable() {
             let tdRival = tr.insertCell(-1);
         }
         $('#problemTable').tablesorter();
-        updateTable();
+        update();
     });
 }
 
-function updateTable() {
+function update() {
     let rivalIds = rival_id.value.replace(' ', '').split(',');
     new Promise((resolve, reject) => {
         let mySubmissions = getSubmissionDict(my_id.value);
@@ -84,10 +100,14 @@ function updateTable() {
     }).then((result) => {
         let mySubmissions = result[0];
         let rivalsSubmissions = result[1];
-        for (let problemRow of problemTbody.rows) {
-            updateRow(problemRow, mySubmissions, rivalsSubmissions);
-        }
+        updateTable(mySubmissions, rivalsSubmissions);
     });
+}
+
+function updateTable(mySubmissions, rivalsSubmissions) {
+    for (let problemRow of problemTbody.rows) {
+        updateRow(problemRow, mySubmissions, rivalsSubmissions);
+    }
 }
 
 function updateRow(problemRow, mySubmissions, rivalsSubmissions) {
@@ -98,34 +118,12 @@ function updateRow(problemRow, mySubmissions, rivalsSubmissions) {
     problemRow.classList.remove('table-danger');
     problemRow.cells[3].innerHTML = '';
 
-    let myStatus = 0;
-    for (let submission of mySubmissions) {
-        if (submission['problemId'] == problemId) {
-            if (submission['status'] == 4) {
-                myStatus = 1;
-                break;
-            }
-            else {
-                myStatus = -1;
-            }
-        }
-    }
+    let myStatus = getStatus(mySubmissions, problemId);
     if (myStatus == 1) problemRow.classList.add('table-success');
     else if (myStatus == -1) problemRow.classList.add('table-danger');
 
     for (let [id, submissions] of Object.entries(rivalsSubmissions)) {
-        let status = 0;
-        for (let submission of submissions) {
-            if (submission['problemId'] == problemId) {
-                if (submission['status'] == 4) {
-                    status = 1;
-                    break;
-                }
-                else {
-                    status = -1;
-                }
-            }
-        }
+        let status = getStatus(submissions, problemId);
         if (status == 1) problemRow.cells[3].innerHTML += `<span class="badge bg-success">${id}</span> `;
         else if (status == -1) problemRow.cells[3].innerHTML += `<span class="badge bg-danger">${id}</span> `;
     }
