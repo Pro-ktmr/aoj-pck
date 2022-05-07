@@ -67,7 +67,7 @@ function showTable() {
 
             let tdRival = tr.insertCell(-1);
         }
-        //$("#problemTable").tablesorter();
+        $('#problemTable').tablesorter();
         updateTable();
     });
 }
