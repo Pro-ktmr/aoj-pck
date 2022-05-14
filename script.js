@@ -75,8 +75,8 @@ function showTable() {
 
             let tdName = tr.insertCell(-1);
             tdName.innerHTML = `<a href="http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=${problem[0]}&lang=ja" target="_blank">${problem[4]}</a>`;
-            if (problem[2] == 'yosen') tdName.innerHTML += ` (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Prelim/${problem[0]} target="_blank">β版</a>)`;
-            if (problem[2] == 'honsen') tdName.innerHTML += ` (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Final/${problem[0]} target="_blank">β版</a>)`;
+            if (problem[2] == 'yosen') tdName.innerHTML += ` (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Prelim/${problem[0]}" target="_blank">β版</a>)`;
+            if (problem[2] == 'honsen') tdName.innerHTML += ` (<a href="https://onlinejudge.u-aizu.ac.jp/challenges/sources/PCK/Final/${problem[0]}" target="_blank">β版</a>)`;
 
             let tdPoint = tr.insertCell(-1);
             tdPoint.innerHTML = problem[5];
