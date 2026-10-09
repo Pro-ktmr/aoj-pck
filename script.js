@@ -35,7 +35,7 @@ function getProblemArray() {
 function getSubmissionDict(id) {
     if (id == '') return [];
     let req = new XMLHttpRequest();
-    req.open('GET', `https://judgeapi.u-aizu.ac.jp/submission_records/users/${id}?size=99999999`, false);
+    req.open('GET', `https://onlinejudge.u-aizu.ac.jp/api/submission_records/users/${id}?size=99999999`, false);
     req.send(null);
     return JSON.parse(req.responseText);
 }
